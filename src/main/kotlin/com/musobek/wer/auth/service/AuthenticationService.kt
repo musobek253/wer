@@ -31,7 +31,8 @@ class AuthenticationService(
         if (userRepository.existsByEmail(request.email)) {
             return AuthenticationResponse(msg = "Already exist by email")
         }
-        if (userRepository.existsByPhoneNumber(request.phoneNumber)) {
+        val exists = userRepository.existsByPhoneNumber(request.phoneNumber).or(false)
+        if (exists) {
             return AuthenticationResponse(msg = "Already exist by phone number")
         }
 

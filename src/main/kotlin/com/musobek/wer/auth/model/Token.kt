@@ -6,15 +6,13 @@ import jakarta.persistence.*
 import lombok.AllArgsConstructor
 import lombok.Data
 
-@AllArgsConstructor
-@Data
+
 @Entity
-@Table(name = "token") // Jadval nomini qo'shdik
+@Table(name = "tokens") // Jadval nomini qo'shdik
 data class Token(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int? = null,  // Nullable qilish yaxshiroq
-
     val token: String,
 
     @Enumerated(EnumType.STRING)

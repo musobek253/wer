@@ -3,10 +3,8 @@ package com.musobek.wer
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.runApplication
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
-@EnableJpaRepositories(basePackages = arrayOf("com.musobek.wer.auth.repo"))
-@EntityScan(basePackages = arrayOf("com.musobek.wer.auth.entity"))
+@EntityScan(basePackages = ["com.musobek.wer.auth.model"])
 @SpringBootApplication
 class WerApplication
 

@@ -5,22 +5,27 @@ import jakarta.persistence.*
 import org.hibernate.proxy.HibernateProxy
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import java.util.*
 
 @Entity
 @Table(name = "users")
 data class User(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    @GeneratedValue(strategy = GenerationType.UUID)
+    val  id : UUID? = null,
 
+    @Column(name = "last_name")  // Ustun nomini aniq ko'rsatish
     val lastName: String,
+
+    @Column(name = "first_name")  // Ustun nomini aniq ko'rsatish
     val firstName: String,
 
     @Column(unique = true)
-    private val email: String, // getUsername() shu orqali ishlaydi
+    private val email: String,
 
-    private val password: String, // getPassword() shu orqali ishlaydi
+    private val password: String,
 
+    @Column(name = "phone_number")  // Ustun nomini aniq ko'rsatish
     val phoneNumber: String,
 
     @Enumerated(EnumType.STRING)
@@ -28,7 +33,7 @@ data class User(
 
     @OneToMany(mappedBy = "user")
     val tokens: List<Token> = emptyList()
-) : UserDetails {
+): UserDetails {
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
         return role.grantedAuthorities()

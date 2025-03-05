@@ -14,7 +14,7 @@ interface TokenRepository : JpaRepository<Token, Int> {
         SELECT t FROM Token t INNER JOIN t.user u 
         WHERE u.id = :userId AND (t.expired = false OR t.revoked = false)
     """)
-    fun findAllValidTokensByUser(@Param("userId") userId: Long?): List<Token>
+    fun findAllValidTokensByUser(@Param("userId") userId: UUID?): List<Token>
 
     fun findByToken(token: String): Optional<Token>
 }

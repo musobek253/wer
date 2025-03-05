@@ -1,10 +1,12 @@
 package com.musobek.wer.auth.config
 
 import com.musobek.wer.auth.repo.UserRepository
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Lazy
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
@@ -17,7 +19,7 @@ import javax.sql.DataSource
 
 
 @Configuration
-class ApplicationConfig(private val userRepository: UserRepository) {
+class ApplicationConfig(@Autowired @Lazy private val userRepository: UserRepository) {
 
     @Bean
     fun userDetailsService(): UserDetailsService {
@@ -47,14 +49,16 @@ class ApplicationConfig(private val userRepository: UserRepository) {
     }
 
     @Bean
-    fun entityManagerFactory(
-        builder: EntityManagerFactoryBuilder,
-        dataSource: DataSource?
-    ): LocalContainerEntityManagerFactoryBean {
-        return builder
-            .dataSource(dataSource)
-            .packages("com.musobek.wer.auth.entity") // specify the package of your entities
-            .persistenceUnit("myJpaUnit")
-            .build()
+    fun entityManagerFactory(dataSource: DataSource?): LocalContainerEntityManagerFactoryBean {
+        val em = LocalContainerEntityManagerFactoryBean()
+        em.dataSource = dataSource
+        em.setPackagesToScan("com.musobek.wer.auth.model") // Entitylarni skanerlash uchun paket
+
+        val vendorAdapter = HibernateJpaVendorAdapter()
+        vendorAdapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect") // To'g'ri dialect
+        em.jpaVendorAdapter = vendorAdapter
+
+        return em
     }
+
 }
